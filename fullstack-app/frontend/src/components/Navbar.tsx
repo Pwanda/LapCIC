@@ -156,7 +156,7 @@ export default function Navbar() {
             <Link href="/" className="flex items-center">
               <div className="flex items-center">
                 <img
-                  src="/logo.png"
+                  src="/CIC_Austria_Logo_black.jpg"
                   alt="Logo"
                   className="h-16 w-16 object-contain border-2 bg-transparent hover:scale-105 transition-transform duration-200"
                   style={{

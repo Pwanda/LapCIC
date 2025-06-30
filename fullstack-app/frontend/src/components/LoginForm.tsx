@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+
 import { authApi } from "@/services/api";
 
 export default function LoginForm() {
@@ -35,9 +35,11 @@ export default function LoginForm() {
       console.log("Redirecting to home..."); // Debug
       // Redirect to home page using Next.js router
       router.push("/");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Login error:", err);
-      setError(err.message || "Invalid username or password");
+      setError(
+        err instanceof Error ? err.message : "Invalid username or password",
+      );
     } finally {
       setLoading(false);
     }

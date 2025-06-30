@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { authApi } from "@/services/api";
+import { authApi, Item } from "@/services/api";
 
 export default function Navbar() {
   const router = useRouter();
@@ -11,10 +11,10 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+
   // Autocomplete State
   const [searchInput, setSearchInput] = useState<string>("");
-  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<Item[]>([]);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [loadingSuggestions, setLoadingSuggestions] = useState<boolean>(false);
   const [dropdownFocused, setDropdownFocused] = useState<boolean>(false);
@@ -89,7 +89,7 @@ export default function Navbar() {
       router.push(`/items?search=${encodeURIComponent(searchInput.trim())}`);
       setShowDropdown(false);
       setSuggestions([]);
-      setSearchTerm("");
+
       setSearchInput("");
       closeMobileMenu();
     }
@@ -117,7 +117,7 @@ export default function Navbar() {
           setSuggestions([]);
           setShowDropdown(false);
         }
-      } catch (err) {
+      } catch {
         setSuggestions([]);
         setShowDropdown(false);
       } finally {
@@ -130,7 +130,7 @@ export default function Navbar() {
 
   // Hide dropdown when clicking outside
   useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
+    const handleClick = () => {
       setShowDropdown(false);
     };
     if (showDropdown && !dropdownFocused) {
@@ -158,7 +158,7 @@ export default function Navbar() {
                 <img
                   src="/CIC_Austria_Logo_black.jpg"
                   alt="Logo"
-                  className="h-16 w-16 object-contain border-2 bg-transparent hover:scale-105 transition-transform duration-200"
+                  className="h-full w-full object-contain border-2 bg-transparent hover:scale-105 transition-transform duration-200"
                   style={{
                     maxWidth: 64,
                     maxHeight: 64,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Item, itemsApi, uploadApi, authApi } from "@/services/api";
 
@@ -15,7 +15,7 @@ const CATEGORIES = [
   "Beauty",
   "Services",
   "Other",
-];
+] ;
 
 interface AddItemFormProps {
   editItem?: Item;
@@ -62,6 +62,33 @@ export default function AddItemForm({
       router.push("/login");
     }
   }, [router]);
+
+  // Handle files from drag and drop or file input
+  const handleFiles = useCallback(
+    (fileList: FileList) => {
+      const selectedFiles = Array.from(fileList);
+
+      // Limit to 5 images total (existing + new)
+      const totalImages =
+        imageUrls.length + images.length + selectedFiles.length;
+      if (totalImages > 5) {
+        setError("You can upload a maximum of 5 images");
+        return;
+      }
+
+      setImages([...images, ...selectedFiles]);
+
+      // Create preview URLs for the selected images
+      const newPreviewUrls = selectedFiles.map((file) =>
+        URL.createObjectURL(file),
+      );
+      setImagePreviewUrls([...imagePreviewUrls, ...newPreviewUrls]);
+
+      // Clear any previous errors
+      setError(null);
+    },
+    [imageUrls.length, images, imagePreviewUrls],
+  );
 
   // Set up drag and drop event listeners
   useEffect(() => {
@@ -118,30 +145,7 @@ export default function AddItemForm({
         dropArea.removeEventListener("drop", handleDrop);
       };
     }
-  }, []);
-
-  // Handle files from drag and drop or file input
-  const handleFiles = (fileList: FileList) => {
-    const selectedFiles = Array.from(fileList);
-
-    // Limit to 5 images total (existing + new)
-    const totalImages = imageUrls.length + images.length + selectedFiles.length;
-    if (totalImages > 5) {
-      setError("You can upload a maximum of 5 images");
-      return;
-    }
-
-    setImages([...images, ...selectedFiles]);
-
-    // Create preview URLs for the selected images
-    const newPreviewUrls = selectedFiles.map((file) =>
-      URL.createObjectURL(file),
-    );
-    setImagePreviewUrls([...imagePreviewUrls, ...newPreviewUrls]);
-
-    // Clear any previous errors
-    setError(null);
-  };
+  }, [handleFiles]);
 
   // Handle image selection from file input
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -255,9 +259,13 @@ export default function AddItemForm({
       if (!onItemAdded && savedItem.id) {
         router.push(`/items/${savedItem.id}`);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error saving item:", err);
-      setError(err.message || "Failed to save item. Please try again.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to save item. Please try again.",
+      );
     } finally {
       setLoading(false);
     }

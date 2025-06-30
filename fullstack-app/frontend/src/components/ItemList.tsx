@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Item, itemsApi, PaginatedResponse } from "@/services/api";
+import { Item, itemsApi } from "@/services/api";
 import Link from "next/link";
 
 const CATEGORIES = [
@@ -284,14 +284,14 @@ export default function ItemList() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 min-h-[600px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 min-h-[600px] items-start">
           {items.map((item) => (
             <Link
               href={`/items/${item.id}`}
               key={item.id}
-              className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
+              className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 flex flex-col h-full min-h-[420px]"
             >
-              <div className="relative h-64 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+              <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden flex-shrink-0">
                 {item.reserved && (
                   <div className="absolute top-3 left-3 z-20 bg-yellow-400 text-yellow-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-lg border border-yellow-500">
                     🔒 Reserviert
@@ -351,9 +351,9 @@ export default function ItemList() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
 
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-grow">
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-bold text-gray-900 group-hover:text-green-600 transition-colors duration-200 leading-tight line-clamp-2">
+                  <h3 className="text-lg font-bold text-gray-900 group-hover:text-green-600 transition-colors duration-200 leading-tight line-clamp-2 min-h-[3.5rem]">
                     {item.name}
                   </h3>
                   {item.reserved && (
@@ -364,16 +364,18 @@ export default function ItemList() {
                 </div>
 
                 <div className="mb-4">
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-full text-lg font-bold text-white bg-green-600 shadow-md">
+                  <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-bold text-white bg-green-600 shadow-md">
                     ✨ Kostenlos
                   </span>
                 </div>
 
-                <p className="text-sm text-gray-600 line-clamp-3 mb-4 leading-relaxed">
-                  {item.description || "Keine Beschreibung verfügbar."}
-                </p>
+                <div className="flex-grow">
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3 min-h-[4rem]">
+                    {item.description || "Keine Beschreibung verfügbar."}
+                  </p>
+                </div>
 
-                <div className="pt-4 border-t border-gray-100 space-y-2">
+                <div className="pt-4 border-t border-gray-100 space-y-3 mt-auto">
                   {item.location && (
                     <div className="flex items-center text-xs text-gray-500">
                       <svg
@@ -391,7 +393,7 @@ export default function ItemList() {
                       <span className="font-medium">{item.location}</span>
                     </div>
                   )}
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between mt-2">
                     <div className="flex items-center text-xs text-gray-500">
                       <svg
                         className="h-4 w-4 mr-2 text-gray-400"

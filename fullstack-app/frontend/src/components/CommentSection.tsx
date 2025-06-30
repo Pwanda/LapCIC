@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { authApi, commentsApi, Comment } from "@/services/api";
+import { commentsApi, Comment } from "@/services/api";
 
 function getAvatarUrl(username: string) {
   return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
@@ -23,7 +23,7 @@ export default function CommentSection({ itemId }: { itemId: number }) {
         const data = await commentsApi.getByItemId(itemId);
         setComments(data);
         setError(null);
-      } catch (err) {
+      } catch {
         setError("Failed to load comments");
       } finally {
         setLoading(false);
@@ -40,7 +40,7 @@ export default function CommentSection({ itemId }: { itemId: number }) {
       const newComment = await commentsApi.add(itemId, input.trim());
       setComments([newComment, ...comments]);
       setInput("");
-    } catch (err) {
+    } catch {
       setError("Failed to add comment");
     }
   };

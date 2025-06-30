@@ -1,9 +1,9 @@
-FROM eclipse-temurin:17-jdk-jammy
+FROM docker.io/library/eclipse-temurin:17-jdk-jammy
 
 # Set working directory
 WORKDIR /app
 
-# Install Maven
+# Install Maven and wget (for healthcheck)
 RUN apt-get update && \
     apt-get install -y wget && \
     wget https://archive.apache.org/dist/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.tar.gz && \

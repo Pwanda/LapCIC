@@ -2,7 +2,7 @@
 
 // Externe Libraries
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+
 import Link from "next/link";
 
 // Eigene Services und Komponenten
@@ -14,7 +14,6 @@ interface ItemDetailProps {
 }
 
 export default function ItemDetail({ itemId }: ItemDetailProps) {
-  const router = useRouter();
   const [item, setItem] = useState<Item | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

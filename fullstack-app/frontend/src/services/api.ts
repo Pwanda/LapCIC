@@ -62,13 +62,6 @@ const getAuthHeader = (): HeadersInit => {
 };
 
 // Default fetch options for consistency
-const getDefaultFetchOptions = (): RequestInit => ({
-  credentials: "include", // Für HTTP-only cookies
-  headers: {
-    "Content-Type": "application/json",
-    ...getAuthHeader(),
-  },
-});
 
 // Auth API service
 export const authApi = {
